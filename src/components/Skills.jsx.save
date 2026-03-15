@@ -1,0 +1,139 @@
+import { motion, useScroll, useTransform } from "framer-motion";
+
+const skillGroups = [
+  {
+    title: "Programming & Scripting",
+    skills: [
+      "Python",
+      "Java",
+      "SQL",
+      "JavaScript",
+      "C (Basics)",
+      "Bash / Shell Scripting",
+    ],
+  },
+  {
+    title: "Data Analytics & Visualization",
+    skills: [
+      "Data Cleaning & Preprocessing",
+      "Exploratory Data Analysis (EDA)",
+      "Feature Engineering",
+      "Power BI Dashboards",
+      "Data Visualization",
+      "Business Insights",
+    ],
+  },
+  {
+    title: "Machine Learning & AI",
+    skills: [
+      "Supervised Learning",
+      "Classification Models",
+      "Fraud Detection Systems",
+      "Model Evaluation & Metrics",
+      "Scikit-learn",
+      "Applied Machine Learning",
+    ],
+  },
+  {
+    title: "Cybersecurity & Networking",
+    skills: [
+      "Adaptive Honeypot Systems",
+      "Intrusion Detection Concepts",
+      "Network Fundamentals",
+      "Linux Networking Tools",
+      "Security-Oriented System Design",
+    ],
+  },
+  {
+    title: "Robotics & Embedded Systems",
+    skills: [
+      "Arduino",
+      "Ultrasonic Sensors",
+      "Bluetooth Communication",
+      "Obstacle Avoidance Systems",
+      "Hardware–Software Integration",
+    ],
+  },
+  {
+    title: "Databases & Backend Concepts",
+    skills: [
+      "MySQL",
+      "Relational Database Design",
+      "CRUD Operations",
+      "SQL Queries & Joins",
+      "Backend Logic Integration",
+    ],
+  },
+  {
+    title: "Tools & Platforms",
+    skills: [
+      "Linux (Kali, Ubuntu)",
+      "Git & GitHub",
+      "VS Code",
+      "Power BI",
+      "Command Line Tools",
+    ],
+  },
+  {
+    title: "Computer Science Foundations",
+    skills: [
+      "Data Structures & Algorithms",
+      "Object-Oriented Programming",
+      "Operating Systems Basics",
+      "Software Engineering Principles",
+      "Problem Solving",
+    ],
+  },
+];
+
+export default function Skills() {
+  return (
+    <section
+      id="skills"
+      className="min-h-screen px-6 py-24 max-w-6xl mx-auto"
+    >
+      {/* Section Title */}
+      <motion.h2
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
+        className="text-4xl md:text-5xl font-bold mb-12 text-center"
+      >
+        Skills
+      </motion.h2>
+
+      {/* Skills Grid */}
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {skillGroups.map((group, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.15 }}
+            viewport={{ once: true }}
+            className="
+              bg-cardDark border border-white/10
+              rounded-2xl p-6
+              hover:border-accent/60
+              transition
+            "
+          >
+            <h3 className="text-xl font-semibold mb-4">
+              {group.title}
+            </h3>
+
+            <ul className="space-y-2 text-gray-400">
+              {group.skills.map((skill, i) => (
+                <li key={i} className="hover:text-accent transition">
+                  {skill}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        ))}
+      </div>
+    </section>
+  );
+}
+

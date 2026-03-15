@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: #050505;
+  /* Deep, rich black */
+  color: #e2e8f0;
+  /* Default text color in dark mode */
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Outfit', sans-serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.glass-card {
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.01) 100%);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.glass-card:hover {
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.12) 0%,
+      rgba(255, 255, 255, 0.02) 100%);
+  border-color: rgba(124, 58, 237, 0.5);
+  /* Stronger Accent border on hover */
+  border-top-color: rgba(124, 58, 237, 0.7);
+  box-shadow:
+    0 12px 48px rgba(124, 58, 237, 0.25),
+    /* Stronger Accent glow */
+    inset 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+#home,
+#projects,
+#skills,
+#certificates,
+#contact {
+  scroll-margin-top: 96px;
+}
+
+/* Fix mobile viewport height */
+:root {
+  --vh: 1vh;
+}
+
+@supports (height: 100svh) {
+  .min-h-screen {
+    min-height: 100svh;
+  }
+}
