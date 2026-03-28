@@ -28,8 +28,8 @@ export default function Hero() {
   });
 
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 80,
-    damping: 20,
+    stiffness: 100,
+    damping: 30, // Higher damping prevents the "boomerang" bounce effect
     restDelta: 0.001,
   });
 
@@ -106,7 +106,8 @@ export default function Hero() {
   }, [imagesLoaded, frameIndex, drawFrame]);
 
   return (
-    <div id="home" ref={wrapperRef} style={{ height: "350vh" }}>
+    /* 350vh desktop / 200vh mobile wrapper so scroll animation is shorter on mobile */
+    <div id="home" ref={wrapperRef} style={{ height: isMobile ? "200vh" : "350vh" }}>
       <section
         ref={sectionRef}
         className="sticky top-0 min-h-screen w-full flex items-center overflow-hidden"
@@ -124,12 +125,12 @@ export default function Hero() {
               /* shift image right (positive X) so subject/face on the left becomes visible */
               style={{ objectPosition: "35% center" }}
             />
-            {/* Edge fades */}
+            {/* Edge fades — wider left fade to hide image border */}
             <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none" />
             <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#050505] to-transparent pointer-events-none" />
-            <div className="absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-[#050505] to-transparent pointer-events-none" />
+            <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[#050505] to-transparent pointer-events-none" />
             <div className="absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-[#050505] to-transparent pointer-events-none" />
-            {/* Dark veil — slightly lighter than desktop so image is visible */}
+            {/* Dark veil */}
             <div className="absolute inset-0 bg-[#050505]/55 pointer-events-none" />
           </div>
         )}
@@ -144,7 +145,7 @@ export default function Hero() {
             />
             <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none" />
             <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#050505] to-transparent pointer-events-none" />
-            <div className="absolute inset-y-0 left-0 w-28 bg-gradient-to-r from-[#050505] to-transparent pointer-events-none" />
+            <div className="absolute inset-y-0 left-0 w-48 lg:w-64 bg-gradient-to-r from-[#050505] to-transparent pointer-events-none" />
             <div className="absolute inset-y-0 right-0 w-28 bg-gradient-to-l from-[#050505] to-transparent pointer-events-none" />
             <div className="absolute inset-0 bg-[#050505]/65 pointer-events-none" />
           </motion.div>
@@ -164,7 +165,7 @@ export default function Hero() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
-              style={isMobile ? {} : { y: badgeY, opacity: badgeOp }}
+              style={{ y: badgeY, opacity: badgeOp }}
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full
                          bg-accent/25 border border-accent/55 text-accent font-semibold
                          text-xs sm:text-sm shadow-[0_0_18px_rgba(124,58,237,0.4)]
@@ -179,7 +180,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              style={isMobile ? {} : { x: h1X, scale: h1Scale, opacity: h1Op }}
+              style={{ x: h1X, scale: h1Scale, opacity: h1Op }}
               className="font-heading font-bold leading-[1.15] tracking-tight text-white
                          text-[clamp(1.75rem,4.5vw,3.5rem)] text-center md:text-left
                          [text-shadow:0_2px_20px_rgba(0,0,0,0.9)]"
@@ -195,7 +196,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.4 }}
-              style={isMobile ? {} : { x: pX, opacity: pOp }}
+              style={{ x: pX, opacity: pOp }}
               className="text-gray-100 text-sm sm:text-base md:text-[1.05rem] leading-relaxed
                          text-center md:text-left max-w-[38ch] mx-auto md:mx-0
                          [text-shadow:0_1px_12px_rgba(0,0,0,0.95)]"
@@ -212,7 +213,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.6 }}
-              style={isMobile ? {} : { y: btnY, opacity: btnOp }}
+              style={{ y: btnY, opacity: btnOp }}
               className="flex flex-wrap gap-3 justify-center md:justify-start"
             >
               <MagneticButton>
@@ -239,7 +240,7 @@ export default function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 2, duration: 1 }}
-          style={isMobile ? {} : { opacity: scrollOp }}
+          style={{ opacity: scrollOp }}
           className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 z-10"
         >
           <span className="text-gray-500 text-[10px] tracking-widest uppercase">Scroll</span>
