@@ -10,24 +10,22 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) setActive(entry.target.id);
-        });
-      },
-      {
-        rootMargin: "-30% 0px -50% 0px",
-        threshold: 0
+    const onScroll = () => {
+      const scrollMid = window.scrollY + window.innerHeight * 0.35;
+      let current = "home";
+      for (const id of sections) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        if (el.getBoundingClientRect().top + window.scrollY <= scrollMid) {
+          current = id;
+        }
       }
-    );
+      setActive(current);
+    };
 
-    sections.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll(); // run once on mount
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (

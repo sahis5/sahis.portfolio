@@ -57,7 +57,7 @@ export default function Projects() {
   return (
     <section
       id="projects"
-      className="relative px-6 md:px-20 py-32 max-w-7xl mx-auto"
+      className="relative px-4 sm:px-6 md:px-12 lg:px-20 py-20 sm:py-28 lg:py-32 max-w-7xl mx-auto"
     >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -66,7 +66,7 @@ export default function Projects() {
         viewport={{ once: true, margin: "-100px" }}
         className="mb-20 text-center"
       >
-        <h2 className="text-4xl md:text-5xl font-heading font-bold text-white mb-4">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-white mb-4">
           Featured <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-indigo-400">Projects</span>
         </h2>
         <p className="text-gray-400 max-w-2xl mx-auto">
@@ -79,7 +79,7 @@ export default function Projects() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
-        className="grid sm:grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12"
+        className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-10"
       >
         {projects.map((project, index) => (
           <motion.div
@@ -89,7 +89,7 @@ export default function Projects() {
             style={{ perspective: 1000 }}
           >
             <InteractiveCard className="relative h-full w-full group">
-              <div className="relative h-full bg-[#0a0a0c] rounded-[23px] p-8 md:p-10 flex flex-col justify-between overflow-hidden">
+              <div className="relative h-full bg-[#0a0a0c] rounded-[23px] p-5 sm:p-7 md:p-10 flex flex-col justify-between overflow-hidden">
                 {/* Subtle hover background glow */}
                 <div className="absolute top-0 right-0 -mt-16 -mr-16 w-32 h-32 bg-accent/20 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 

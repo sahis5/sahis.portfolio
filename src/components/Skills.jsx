@@ -57,7 +57,7 @@ export default function Skills() {
   return (
     <section
       id="skills"
-      className="px-6 md:px-20 py-24 max-w-7xl mx-auto relative"
+      className="px-4 sm:px-6 md:px-12 lg:px-20 py-16 sm:py-24 max-w-7xl mx-auto relative"
     >
       {/* Background Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40rem] h-[40rem] bg-accent/5 rounded-full blur-[100px] pointer-events-none" />
@@ -69,7 +69,7 @@ export default function Skills() {
         viewport={{ once: true, margin: "-100px" }}
         className="mb-16 text-center relative z-10"
       >
-        <h2 className="text-4xl md:text-5xl font-heading font-bold text-white mb-4">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-white mb-4">
           Technical <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-indigo-400">Skills</span>
         </h2>
         <p className="text-gray-400 max-w-2xl mx-auto">
@@ -82,7 +82,7 @@ export default function Skills() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
-        className="grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6 relative z-10"
+        className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6 relative z-10"
       >
         {skillGroups.map((group, index) => (
           <motion.div
@@ -92,7 +92,7 @@ export default function Skills() {
             className="group relative"
           >
             <InteractiveCard className="h-full w-full">
-              <div className="h-full w-full glass-card rounded-3xl p-8 border border-white/5 hover:border-accent/30 transition-all duration-300 hover:shadow-[0_20px_40px_rgba(124,58,237,0.1)] relative overflow-hidden">
+              <div className="h-full w-full glass-card rounded-3xl p-5 sm:p-7 md:p-8 border border-white/5 hover:border-accent/30 transition-all duration-300 hover:shadow-[0_20px_40px_rgba(124,58,237,0.1)] relative overflow-hidden">
                 {/* Top accent gradient line */}
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-accent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 

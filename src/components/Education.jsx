@@ -42,7 +42,7 @@ export default function Education() {
     return (
         <section
             id="education"
-            className="relative px-6 md:px-20 py-32 max-w-7xl mx-auto"
+            className="relative px-4 sm:px-6 md:px-12 lg:px-20 py-20 sm:py-28 lg:py-32 max-w-7xl mx-auto"
         >
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -51,7 +51,7 @@ export default function Education() {
                 viewport={{ once: true, margin: "-100px" }}
                 className="mb-20 text-center relative z-10"
             >
-                <h2 className="text-4xl md:text-5xl font-heading font-bold text-white mb-4">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-white mb-4">
                     Education & <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-indigo-400">Qualifications</span>
                 </h2>
                 <p className="text-gray-400 max-w-2xl mx-auto">
@@ -81,7 +81,7 @@ export default function Education() {
 
                         <div className="md:pl-16">
                             <InteractiveCard className="w-full">
-                                <div className="w-full glass-card rounded-3xl p-8 border border-white/5 hover:border-accent/30 transition-all duration-300 hover:shadow-[0_20px_40px_rgba(124,58,237,0.15)] relative overflow-hidden">
+                                <div className="w-full glass-card rounded-3xl p-5 sm:p-7 md:p-8 border border-white/5 hover:border-accent/30 transition-all duration-300 hover:shadow-[0_20px_40px_rgba(124,58,237,0.15)] relative overflow-hidden">
 
                                     {/* Subtle top gradient line */}
                                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-accent to-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -93,7 +93,7 @@ export default function Education() {
                                         <div>
                                             <div className="flex items-center gap-3 mb-2">
                                                 <GraduationCap className="w-6 h-6 text-accent" />
-                                                <h3 className="text-2xl font-heading font-bold text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-accent group-hover:to-indigo-400 transition-all duration-300">
+                                                <h3 className="text-xl sm:text-2xl font-heading font-bold text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-accent group-hover:to-indigo-400 transition-all duration-300">
                                                     {edu.degree}
                                                 </h3>
                                             </div>
