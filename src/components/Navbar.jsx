@@ -11,12 +11,19 @@ export default function Navbar() {
 
   useEffect(() => {
     const onScroll = () => {
+      // Always show "home" when near the very top
+      if (window.scrollY < 60) {
+        setActive("home");
+        return;
+      }
+
+      // Pick the last section whose top edge is above 35% down the viewport
       const scrollMid = window.scrollY + window.innerHeight * 0.35;
       let current = "home";
       for (const id of sections) {
         const el = document.getElementById(id);
         if (!el) continue;
-        if (el.getBoundingClientRect().top + window.scrollY <= scrollMid) {
+        if (el.offsetTop <= scrollMid) {
           current = id;
         }
       }
@@ -24,7 +31,7 @@ export default function Navbar() {
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll(); // run once on mount
+    onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
