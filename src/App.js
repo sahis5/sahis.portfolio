@@ -1,5 +1,5 @@
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { useRef } from "react";
+import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
+import { useRef, useState } from "react";
 import ParticlesBackground from "./components/ParticlesBackground";
 import CursorGlow from "./components/CursorGlow";
 import Navbar from "./components/Navbar";
@@ -10,9 +10,12 @@ import Skills from "./components/Skills";
 import Certificates from "./components/Certificates";
 import Contact from "./components/Contact";
 import SectionDivider from "./components/SectionDivider";
+import Loader from "./components/Loader";
 
 export default function App() {
   const containerRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadProgress, setLoadProgress] = useState(0);
 
   // Premium Scroll Progress with Spring smoothing
   const { scrollYProgress } = useScroll({
@@ -31,34 +34,48 @@ export default function App() {
   // Removing negative Y translation on content to prevent it from pushing the bounding box down and creating scroll overflow
 
   return (
-    <div ref={containerRef} className="relative text-white flex flex-col min-h-screen overflow-clip">
-      {/* CUSTOM CURSOR EFFECT */}
-      <CursorGlow />
+    <>
+      {/* GLOBAL LOADING PANE */}
+      <Loader progress={loadProgress} isLoading={isLoading} />
 
-      {/* PARALLAX BACKGROUND LAYER */}
-      <motion.div
-        style={{ y: backgroundY }}
-        className="fixed inset-0 z-0 h-[120vh] pointer-events-none"
+      {/* Main app is fully rendered behind the loader, but scroll is locked until loaded */}
+      <div
+        ref={containerRef}
+        className={`relative text-white flex flex-col min-h-screen overflow-clip transition-opacity duration-1000 ${
+          isLoading ? "max-h-screen overflow-hidden opacity-0" : "opacity-100"
+        }`}
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-indigo-950/10 to-[#050505]" />
-        <ParticlesBackground />
-      </motion.div>
+        {/* CUSTOM CURSOR EFFECT */}
+        <CursorGlow />
 
-      {/* PARALLAX CONTENT LAYER */}
-      <motion.div className="relative z-10 w-full flex-grow">
-        <Navbar />
-        <Hero />
-        <SectionDivider />
-        <Projects />
-        <SectionDivider />
-        <Education />
-        <SectionDivider />
-        <Skills />
-        <SectionDivider />
-        <Certificates />
-        <SectionDivider />
-        <Contact />
-      </motion.div>
-    </div>
+        {/* PARALLAX BACKGROUND LAYER */}
+        <motion.div
+          style={{ y: backgroundY }}
+          className="fixed inset-0 z-0 h-[120vh] pointer-events-none"
+        >
+          <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-indigo-950/10 to-[#050505]" />
+          <ParticlesBackground />
+        </motion.div>
+
+        {/* PARALLAX CONTENT LAYER */}
+        <motion.div className="relative z-10 w-full flex-grow">
+          <Navbar />
+          <Hero
+            onProgress={(val) => setLoadProgress(val)}
+            onReady={() => setIsLoading(false)}
+          />
+          <SectionDivider />
+          <Projects />
+          <SectionDivider />
+          <Education />
+          <SectionDivider />
+          <Skills />
+          <SectionDivider />
+          <Certificates />
+          <SectionDivider />
+          <Contact />
+        </motion.div>
+      </div>
+    </>
   );
 }

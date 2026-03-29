@@ -13,7 +13,7 @@ const frames = Array.from({ length: TOTAL_FRAMES }, (_, i) => {
 // Check at module level so it doesn't change during render
 const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
 
-export default function Hero() {
+export default function Hero({ onProgress, onReady }) {
   const wrapperRef    = useRef(null);
   const sectionRef    = useRef(null);
   const canvasRef     = useRef(null);
@@ -74,22 +74,36 @@ export default function Hero() {
     ctx.drawImage(img, (w - dw) / 2 + xShift, (h - dh) / 2, dw, dh);
   }, []);
 
-  // Preload — DESKTOP ONLY (skip on mobile to avoid loading 205 images)
+  // Preload all frames for all devices
   useEffect(() => {
-    if (isMobile) return;
     let loaded = 0;
     imagesRef.current = [];
     frames.forEach((src, i) => {
       const img = new Image();
       img.src = src;
-      img.onload  = () => { imagesRef.current[i] = img; if (++loaded === TOTAL_FRAMES) setImagesLoaded(true); };
-      img.onerror = () => { if (++loaded === TOTAL_FRAMES) setImagesLoaded(true); };
+      img.onload = () => {
+        imagesRef.current[i] = img;
+        loaded++;
+        if (onProgress) onProgress((loaded / TOTAL_FRAMES) * 100);
+        if (loaded === TOTAL_FRAMES) {
+          setImagesLoaded(true);
+          if (onReady) onReady();
+        }
+      };
+      img.onerror = () => {
+        loaded++;
+        if (onProgress) onProgress((loaded / TOTAL_FRAMES) * 100);
+        if (loaded === TOTAL_FRAMES) {
+          setImagesLoaded(true);
+          if (onReady) onReady();
+        }
+      };
     });
-  }, []);
+  }, [onProgress, onReady]);
 
-  // Subscribe canvas to frameIndex + ResizeObserver (desktop only)
+  // Subscribe canvas to frameIndex + ResizeObserver
   useEffect(() => {
-    if (isMobile || !imagesLoaded) return;
+    if (!imagesLoaded) return;
     drawFrame(0);
     const unsubFrame = frameIndex.on("change", (v) => {
       currentIdxRef.current = v;
@@ -106,50 +120,26 @@ export default function Hero() {
   }, [imagesLoaded, frameIndex, drawFrame]);
 
   return (
-    /* 350vh desktop / 200vh mobile wrapper so scroll animation is shorter on mobile */
-    <div id="home" ref={wrapperRef} style={{ height: isMobile ? "200vh" : "350vh" }}>
+    <div id="home" ref={wrapperRef} style={{ height: "350vh" }}>
       <section
         ref={sectionRef}
         className="sticky top-0 min-h-screen w-full flex items-center overflow-hidden"
       >
         {/* ── BACKGROUND ─────────────────────────────────────────────────── */}
 
-        {/* MOBILE: Single static image — fast, no JS animation */}
-        {isMobile && (
-          <div className="absolute inset-0 z-0">
-            <img
-              src="/images/herosection/ezgif-frame-001.png"
-              alt=""
-              aria-hidden="true"
-              className="w-full h-full object-cover"
-              /* shift image right (positive X) so subject/face on the left becomes visible */
-              style={{ objectPosition: "35% center" }}
-            />
-            {/* Edge fades — wider left fade to hide image border */}
-            <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none" />
-            <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#050505] to-transparent pointer-events-none" />
-            <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[#050505] to-transparent pointer-events-none" />
-            <div className="absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-[#050505] to-transparent pointer-events-none" />
-            {/* Dark veil */}
-            <div className="absolute inset-0 bg-[#050505]/55 pointer-events-none" />
-          </div>
-        )}
-
-        {/* DESKTOP: Scroll-driven canvas animation */}
-        {!isMobile && (
-          <motion.div className="absolute inset-0 z-0" style={{ opacity: canvasOp }}>
-            <canvas
-              ref={canvasRef}
-              className="absolute inset-0 w-full h-full"
-              style={{ display: "block" }}
-            />
-            <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none" />
-            <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#050505] to-transparent pointer-events-none" />
-            <div className="absolute inset-y-0 left-0 w-48 lg:w-64 bg-gradient-to-r from-[#050505] to-transparent pointer-events-none" />
-            <div className="absolute inset-y-0 right-0 w-28 bg-gradient-to-l from-[#050505] to-transparent pointer-events-none" />
-            <div className="absolute inset-0 bg-[#050505]/65 pointer-events-none" />
-          </motion.div>
-        )}
+        {/* Scroll-driven canvas animation on all devices */}
+        <motion.div className="absolute inset-0 z-0" style={{ opacity: canvasOp }}>
+          <canvas
+            ref={canvasRef}
+            className="absolute inset-0 w-full h-full"
+            style={{ display: "block" }}
+          />
+          <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#050505] to-transparent pointer-events-none" />
+          <div className="absolute inset-y-0 left-0 w-48 lg:w-64 bg-gradient-to-r from-[#050505] to-transparent pointer-events-none" />
+          <div className="absolute inset-y-0 right-0 w-28 bg-gradient-to-l from-[#050505] to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-[#050505]/65 pointer-events-none" />
+        </motion.div>
 
         {/* GLOW ACCENTS */}
         <div className="absolute top-1/4 left-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-accentGlow rounded-full blur-[120px] mix-blend-screen opacity-20 pointer-events-none" />
