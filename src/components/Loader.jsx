@@ -1,81 +1,120 @@
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Loader({ progress, isLoading }) {
+  // As progress goes from 0 to 100, the balls move closer to the center:
+  // Offset starts at 60px away, moves down to 0px
+  const offset = 70 - (progress / 100) * 70;
+
+  const ballColors = [
+    "from-accent to-purple-500",
+    "from-indigo-400 to-cyan-400",
+    "from-fuchsia-500 to-rose-500",
+  ];
+
   return (
     <AnimatePresence>
       {isLoading && (
         <motion.div
-          key="loader"
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0, y: "-100%" }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#050505] text-white overflow-hidden"
+          key="loader-container"
+          initial="initial"
+          animate="visible"
+          exit="exit"
+          variants={{
+            initial: { opacity: 1 },
+            visible: { opacity: 1 },
+            // Outer container fades out after the blast
+            exit: { opacity: 0, transition: { duration: 1, ease: "easeInOut", delay: 0.2 } },
+          }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-[#050505] overflow-hidden"
         >
-          {/* Subtle animated background glow */}
+          {/* Subtle background glow that pulses with energy */}
           <motion.div
-            animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute w-96 h-96 bg-accentGlow rounded-full blur-[100px] pointer-events-none"
+            animate={{ 
+              scale: 1 + (progress / 100), 
+              opacity: 0.1 + (progress / 100) * 0.3 
+            }}
+            className="absolute w-96 h-96 bg-accentGlow rounded-full blur-[120px] pointer-events-none"
           />
 
-          <div className="relative z-10 flex flex-col items-center gap-8">
-            {/* Logo / Initials */}
-            <div className="relative flex items-center justify-center w-24 h-24">
-              <motion.div
-                initial={{ rotate: -90, strokeDasharray: "0 100" }}
-                animate={{ rotate: 0, strokeDasharray: `${progress} 100` }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
-                className="absolute inset-0"
-              >
-                <svg className="w-full h-full -rotate-90 transform" viewBox="0 0 100 100">
-                  <circle
-                    cx="50"
-                    cy="50"
-                    r="48"
-                    fill="transparent"
-                    stroke="rgba(255,255,255,0.1)"
-                    strokeWidth="2"
-                  />
-                  <motion.circle
-                    cx="50"
-                    cy="50"
-                    r="48"
-                    fill="transparent"
-                    stroke="#7c3aed"
-                    strokeWidth="2"
-                    strokeDasharray="301.59" // 2 * PI * r
-                    strokeDashoffset={301.59 - (301.59 * progress) / 100}
-                    strokeLinecap="round"
-                    className="transition-all duration-300 ease-out"
-                  />
-                </svg>
-              </motion.div>
-              <div className="text-2xl font-bold tracking-widest font-heading font-outline">
-                MS
-              </div>
-            </div>
+          {/* 
+            THE NOVA BLAST 
+            Hidden initially. On exit, scales massive to create the "flash" that transitions to the portfolio.
+          */}
+          <motion.div
+            variants={{
+              initial: { scale: 0, opacity: 0 },
+              visible: { scale: 0, opacity: 0 },
+              exit: { 
+                scale: 40, // 32 * 4 * 40 = 5120px (fills screen)
+                opacity: [0, 1, 0], 
+                transition: { duration: 1.2, ease: "circIn" } 
+              }
+            }}
+            className="absolute z-20 w-32 h-32 bg-white rounded-full mix-blend-screen pointer-events-none"
+          />
 
-            {/* Percentage Text */}
-            <div className="flex flex-col items-center gap-2">
-              <span className="text-xs tracking-[0.3em] text-gray-400 uppercase font-medium">
-                Initializing
-              </span>
-              <span className="text-4xl font-light tabular-nums tracking-wider text-white">
-                {Math.round(progress)}
-                <span className="text-xl text-gray-500">%</span>
-              </span>
-            </div>
-            
-            {/* Loading Bar */}
-            <div className="w-48 h-[2px] bg-white/10 rounded-full overflow-hidden mt-4">
-              <motion.div
-                className="h-full bg-gradient-to-r from-accent to-indigo-400"
-                initial={{ width: "0%" }}
-                animate={{ width: `${progress}%` }}
-                transition={{ duration: 0.2, ease: "easeOut" }}
-              />
-            </div>
-          </div>
+          {/* 
+            ENERGY BALLS SYSTEM 
+            Shrinks away into the blast on exit.
+          */}
+          <motion.div
+            variants={{
+              initial: { scale: 0, opacity: 0 },
+              visible: { scale: 1, opacity: 1, transition: { duration: 1 } },
+              exit: { scale: 0, opacity: 0, transition: { duration: 0.2 } }
+            }}
+            className="relative flex items-center justify-center z-10"
+          >
+            {/* The spinning container */}
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+              className="relative flex items-center justify-center w-64 h-64"
+            >
+              {[0, 120, 240].map((angle, i) => (
+                <motion.div
+                  key={i}
+                  animate={{
+                    x: Math.cos((angle * Math.PI) / 180) * offset,
+                    y: Math.sin((angle * Math.PI) / 180) * offset,
+                    scale: 1 + (progress / 100) * 0.5,
+                  }}
+                  transition={{ type: "spring", stiffness: 100, damping: 20 }}
+                  className={`absolute w-12 h-12 rounded-full bg-gradient-to-br mix-blend-screen blur-[2px] ${ballColors[i]}`}
+                  style={{
+                    boxShadow: "0 0 20px currentColor",
+                    color: i === 0 ? "#7c3aed" : i === 1 ? "#38bdf8" : "#f43f5e"
+                  }}
+                />
+              ))}
+            </motion.div>
+
+            {/* Core energy nucleus (appears as they come closer) */}
+            <motion.div
+              animate={{ 
+                scale: (progress / 100), 
+                opacity: progress > 50 ? (progress / 100) : 0 
+              }}
+              className="absolute w-16 h-16 bg-white rounded-full blur-[8px] mix-blend-screen"
+            />
+          </motion.div>
+
+          {/* Progress Number below */}
+          <motion.div
+            variants={{
+              initial: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { delay: 0.5 } },
+              exit: { opacity: 0, y: 20, transition: { duration: 0.3 } }
+            }}
+            className="absolute bottom-32 flex flex-col items-center gap-2"
+          >
+             <span className="text-xs tracking-[0.4em] text-gray-400/70 uppercase font-medium">
+               Stabilizing Core
+             </span>
+             <span className="text-3xl font-light tabular-nums tracking-widest text-white/90 drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
+               {Math.round(progress)}<span className="text-lg text-gray-500/80">%</span>
+             </span>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
