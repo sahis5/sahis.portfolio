@@ -10,9 +10,6 @@ const frames = Array.from({ length: TOTAL_FRAMES }, (_, i) => {
   return `/images/herosection/ezgif-frame-${n}.png`;
 });
 
-// Check at module level so it doesn't change during render
-const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
-
 export default function Hero({ onProgress, onReady }) {
   const wrapperRef    = useRef(null);
   const sectionRef    = useRef(null);

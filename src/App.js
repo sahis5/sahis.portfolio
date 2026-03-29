@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef, useState } from "react";
 import ParticlesBackground from "./components/ParticlesBackground";
 import CursorGlow from "./components/CursorGlow";
